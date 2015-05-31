@@ -94,7 +94,6 @@ var patronToPHP = function (cardNum, pin) {
     req.onreadystatechange = function () {
         if (this.readyState === 4 && req.status === 200) {
             var valid = req.responseText;
-            console.log(valid);
 
             if (valid == true) {
                 //If the users input is valid login
@@ -104,7 +103,7 @@ var patronToPHP = function (cardNum, pin) {
             else if (valid == false) {
                 //If the users input is not valid
                 var message = document.getElementById("message");
-                message.innerHTML = "Invalid username or password entered";
+                message.innerHTML = "Invalid library card number or pin entered";
             }
         }
     };
@@ -118,6 +117,11 @@ var patronToPHP = function (cardNum, pin) {
 }
 
 var librarianLogon = function () {
+    //Generate form to login
+    generateLibrarianForm();
+}
+
+var generateLibrarianForm = function () {
     //Change the header instruction
     var loginHeader = document.getElementById("loginHeader");
     loginHeader.innerHTML = "Librarian Log in:";
@@ -145,6 +149,8 @@ var librarianLogon = function () {
     var userInput = document.createElement('input');
     userInput.type = "text";
     userInput.className = "loginInput";
+    userInput.name = "username";
+    userInput.id = "userInput";
 
     userPara.appendChild(userText);
 
@@ -157,16 +163,19 @@ var librarianLogon = function () {
     var pinInput = document.createElement('input');
     pinInput.type = "password";
     pinInput.className = "loginInput";
+    pinInput.name = "pin";
+    pinInput.id = "pinInput";
 
 
     pinPara.appendChild(pinText);
 
     //Create log in button
     var loginButton = document.createElement('input');
-    loginButton.type = "submit";
-    loginButton.action = "librarian.php";
+    loginButton.type = "button";
+    loginButtonName = "librarianLog";
     loginButton.value = "Log in";
     loginButton.className = "homeButton";
+    loginButton.onclick = function () { librarianForm() };
 
     //Create form element
     var loginForm = document.createElement('form');
@@ -180,4 +189,46 @@ var librarianLogon = function () {
 
     //Append the form to the parent div
     parent.appendChild(loginForm);
+}
+
+var librarianForm = function () {
+    //Gets variables from librarian login form
+    var UN = document.getElementById("userInput").value;
+    var PI = document.getElementById("pinInput").value;
+
+    librarianToPHP(UN, PI);
+}
+
+var librarianToPHP = function (username, pin) {
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "librarianLog=set&username="+username+"&pin="+pin;
+
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            var valid = req.responseText;
+
+            if (valid == true) {
+                //If the users input is valid login
+                //send to patron homepage
+                window.location.href = "librarianHome.php";
+            }
+            else if (valid == false) {
+                //If the users input is not valid
+                var message = document.getElementById("message");
+                message.innerHTML = "Invalid username or pin entered";
+            }
+        }
+    };
+
+    req.open('POST', 'processLogin.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("message");
+    message.innerHTML = "Processing...";
 }
