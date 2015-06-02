@@ -42,6 +42,27 @@
     if(isset($_POST['return'])){
         $mysqli->query("UPDATE Book SET checkedOutBy=NULL, dueDate=NULL, dateOut=NULL WHERE id='".$_POST['return']."'");
     }
+
+    //If the request book button is clicked
+    if(isset($_POST['request'])) {
+        $mysqli->query("INSERT INTO request(pid, bid) VALUES ((SELECT id FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'), '".$_POST['request']."')");
+    }
+
+    //If the cancel request button is clicked
+    if(isset($_POST['cancel'])) {
+        $mysqli->query("DELETE FROM request WHERE pid =(SELECT id FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."') AND bid='".$_POST['cancel']."'");
+    }
+
+    //If the button to check out a requested book is clicked
+    if(isset($_POST['reqCheckOut'])){
+        //Check the book out
+        $mysqli->query("UPDATE Book SET checkedOutBy=(SELECT id FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'), dateOut=curdate(), dueDate=date_add(curdate(), INTERVAL 10 DAY)
+                        WHERE id='".$_POST['reqCheckOut']."'");
+
+        //Delete the request
+        $mysqli->query("DELETE FROM request WHERE pid =(SELECT id FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."') AND bid='".$_POST['reqCheckOut']."'");
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -161,19 +182,74 @@
                     echo "<td>";
 
                     //Check out row
+                    //User id
+                    $Person = $mysqli->query("SELECT id FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'");
+                    $pid = $Person->fetch_assoc();
+                    //Get request data
+                    $requests = $mysqli->query("SELECT pid FROM request WHERE bid='".$row['id']."'");
+                    $numRequests = mysqli_num_rows($requests);
+                    $requestMin = $mysqli->query("SELECT MIN(pid) FROM request WHERE bid='".$row['id']."'");
+                    $first = $requests->fetch_assoc();
+
                     if ($row['checkedOutBy'] == NULL) {
-                        //If not checked out print check out button
-                        echo '<form method="POST"><button type="submit" class="tableButton" value="' . $row['id'] . '" name="checkOut">Check Out</button></form>';
+
+                        //If not checked out  and no requests print check out button
+                        if ($numRequests == 0) {
+                            echo '<form method="POST"><button type="submit" class="tableButton" value="' . $row['id'] . '" name="checkOut">Check Out</button></form>';
+                        }
+                        //If not checked out and user is first in request line
+                        else if ($pid['id'] == $first['pid']) {
+                            echo "Requested book available";
+                            echo '<form method="POST"><button type="submit" class="tableButton" value="' . $row['id'] . '" name="reqCheckOut">Check Out</button></form>';
+                        }
+                        else {
+                            //If the book is requested and user is not first in line
+                            echo "On hold<br>";
+                            echo "<br> Number of requests: " .$numRequests;
+
+                            //Print request/cancel request buttons
+                            $requested = false;
+                            while($reqRow = $requests->fetch_assoc()) {
+                                if($reqRow['pid'] == $pid['id']) {
+                                    $requested = true;
+                                }
+                            }
+
+                            if($requested == true) {
+                                //If the book is request by this user print cancel request button
+                                echo '<form method="POST"><button type="submit" class="tableButton" value="'.$row['id'].'" name="cancel">Cancel Request</button></form>';
+                            }
+                            else {
+                                //If the book has not been requested by this user print request button
+                                echo '<form method="POST"><button type="submit" class="tableButton" value="'.$row['id'].'" name="request">Request</button></form>';
+                            }
+                        }
                     } else if ($row['libNum'] == $_SESSION['cardNum']) {
                         //If checked out by current user print return button
                         echo "Due date:<br>" . $row['dueDate'];
                         echo '<form method="POST"><button type="submit" class="tableButton" value="' . $row['id'] . '" name="return">Return</button></form>';
                     } else {
-                        //If check out by someone else print request button and due date
+                        //If checked out by someone else print due date and # of requests
                         echo "Checked Out <br>";
                         echo "Due date:<br>" . $row['dueDate'];
-                        echo 'Number of requests';
-                        echo "Request Button";
+                        echo "<br><br> Number of requests: " .$numRequests;
+
+                        $requested = false;
+                        //Determine if the book has been requested by this user
+                       while($reqRow = $requests->fetch_assoc()) {
+                           if($reqRow['pid'] == $pid['id']) {
+                               $requested = true;
+                           }
+                        }
+
+                        if($requested == true) {
+                            //If the book is request by this user print cancel request button
+                            echo '<form method="POST"><button type="submit" class="tableButton" value="'.$row['id'].'" name="cancel">Cancel Request</button></form>';
+                        }
+                        else {
+                            //If the book has not been requested by this user print request button
+                            echo '<form method="POST"><button type="submit" class="tableButton" value="'.$row['id'].'" name="request">Request</button></form>';
+                        }
                     }
                 }
             }
