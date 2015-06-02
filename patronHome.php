@@ -1,4 +1,6 @@
 <?php
+    include "secret.php";
+
     session_start();
 
     //destroy data in session array and redirects to login page
@@ -22,6 +24,13 @@
           }
       }
     }
+
+    //Connecting to database
+    $mysqli = new mysqli("oniddb.cws.oregonstate.edu", "wegnerma-db", $password, "wegnerma-db");
+
+    if (!$mysqli|| $mysqli->connect_errno) {
+         echo "Failed to connect:" . $mysqli->connect_errno . " " . $mysqli->connect_error;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -33,22 +42,42 @@
     <title>Patron Homepage</title>
 </head>
 <body class="phome">
-//header of page
+<!-- header of page -->
 <div class="pheader">
 
+    <!-- Display the users profile info -->
     <div class="profileInfo">
-        <p>NAME HERE</p>
-        <p>CARD #</p>
+        <p>
+            <!--Print users name-->
+            <?php
+                 $names = $mysqli->query("SELECT fname, lname FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'");
+
+                $name = $names->fetch_assoc();
+
+                echo $name['fname'];
+                echo " ";
+                echo $name['lname'];
+            ?>
+        </p>
+        <p>CARD #:
+            <!-- Print users card number -->
+            <?php
+                echo $_SESSION['cardNum'];
+            ?>
+        </p>
     </div>
 
+    <!-- Link to the users profile page -->
     <div class="profileLink">
         <input type="submit" class="profileButton" value="Profile" onclick="Location.href='patronProfile.php'">
     </div>
 
+    <!-- Button to logout -->
     <div class="logout">
         <input type="submit"class="logoutButton" value="Logout" onclick="location.href='patronHome.php?action=logout'">
     </div>
 
+    <!-- Form to search books -->
     <div class="search">
         <form class="searchForm" action="patronBookInventory" method="GET">
             <input type="text" class="searchInput">
@@ -65,7 +94,16 @@
     </div>
 </div>
 
-
+<div>
+    <table>
+        <tbody>
+        <tr><th>Title</th><th>Author Name</th><th>Description</th><th>Genre</th><th>Location</th><th>Check Out</th></tr>
+        <?php
+            $books = $mysqli->
+        ?>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

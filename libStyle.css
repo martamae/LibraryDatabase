@@ -11,7 +11,8 @@ body
 }
 .header, .pheader
 {
-    padding: 25px;
+    padding-top: 25px;
+    padding-bottom:25px;
     margin:0px;
     background-color: #66CDBA;
     width: 100%;
@@ -78,7 +79,7 @@ a:hover
 .pheader
 {
     background-color: #E2E6E6;
-    height: 30px;
+    height:35px;
     color:#4A4D4D;
 }
 .profileInfo, .logout, .profileLink
@@ -89,7 +90,8 @@ a:hover
 }
 .profileInfo 
 {
-    margin-top:5px;
+    margin-top:7px;
+    margin-left:15px;
 }
 .profileInfo > p 
 {
@@ -117,7 +119,33 @@ a:hover
 .searchButton
 {
     margin-left:0px;
+    margin-right:15px;
 }
-
+table 
+{
+    margin:50px;
+    border-style:solid;
+    border-collapse:collapse;
+}
+th, td 
+{
+    width: 200px;
+}
+th
+{
+    background-color:#66CDBA;
+    color:#FBFBFB;
+}
+td
+{
+    padding:3px;
+    background-color:White;
+}
+table, th, td 
+{   
+    border:solid;
+    border-width:1px;
+    border-color:#C9CDCD;
+}
 
     

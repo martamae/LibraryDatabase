@@ -65,5 +65,7 @@
         }
 
         echo $valid;
+
+        $mysqli->close();
     }
 ?>
