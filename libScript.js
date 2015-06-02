@@ -250,3 +250,28 @@ var librarianToPHP = function (username, pin) {
     var message = document.getElementById("message");
     message.innerHTML = "Processing...";
 }
+
+var pwForm = function () {
+    //Delete replace button
+    var replace = document.getElementById("replace");
+    replace.parentNode.removeChild(replace);
+
+    //Generate form
+    var pwInput = document.createElement("input");
+    pwInput.type = "password";
+    pwInput.className = "inProfile";
+    pinInput.name = "pw";
+    pinInput.id = "pw";
+
+    //Create replace button
+    var replaceButton = document.createElement('input');
+    replaceButton.type = "button";
+    replaceButtonName = "replaceButton";
+    loginButton.value = "Replace";
+    loginButton.className = "inProfile";
+    loginButton.onclick = function () { checkPassword() };
+}
+
+var checkPassword = function () {
+    
+}

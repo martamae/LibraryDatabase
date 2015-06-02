@@ -101,12 +101,12 @@
 
     <!-- Link to the users profile page -->
     <div class="profileLink">
-        <input type="submit" class="profileButton" value="Profile" onclick="Location.href='patronProfile.php'">
+        <a href="patronProfile.php"><input type="button" class="profileButton" value="Profile"></a>
     </div>
 
     <!-- Button to logout -->
     <div class="logout">
-        <input type="submit"class="logoutButton" value="Logout" onclick="location.href='patronHome.php?action=logout'">
+        <a href="patronHome.php?action=logout"><input type="button" class="logoutButton" value="Logout"></a>
     </div>
 
     <!-- Form to search books -->
@@ -188,8 +188,8 @@
                     //Get request data
                     $requests = $mysqli->query("SELECT pid FROM request WHERE bid='".$row['id']."'");
                     $numRequests = mysqli_num_rows($requests);
-                    $requestMin = $mysqli->query("SELECT MIN(pid) FROM request WHERE bid='".$row['id']."'");
-                    $first = $requests->fetch_assoc();
+                    $requestMin = $mysqli->query("SELECT MIN(id), pid FROM request WHERE bid='".$row['id']."'");
+                    $first = $requestMin->fetch_assoc();
 
                     if ($row['checkedOutBy'] == NULL) {
 
@@ -224,17 +224,20 @@
                                 echo '<form method="POST"><button type="submit" class="tableButton" value="'.$row['id'].'" name="request">Request</button></form>';
                             }
                         }
-                    } else if ($row['libNum'] == $_SESSION['cardNum']) {
+                    }
+                    else if ($row['libNum'] == $_SESSION['cardNum']) {
                         //If checked out by current user print return button
                         echo "Due date:<br>" . $row['dueDate'];
                         echo '<form method="POST"><button type="submit" class="tableButton" value="' . $row['id'] . '" name="return">Return</button></form>';
-                    } else {
+                    }
+                    else {
                         //If checked out by someone else print due date and # of requests
                         echo "Checked Out <br>";
                         echo "Due date:<br>" . $row['dueDate'];
                         echo "<br><br> Number of requests: " .$numRequests;
 
                         $requested = false;
+                        $requests = $mysqli->query("SELECT pid FROM request WHERE bid='".$row['id']."'");
                         //Determine if the book has been requested by this user
                        while($reqRow = $requests->fetch_assoc()) {
                            if($reqRow['pid'] == $pid['id']) {
@@ -269,3 +272,6 @@
 </body>
 </html>
 
+<?php
+    $mysqli->close();
+?>
