@@ -25,7 +25,7 @@ var patronLogon = function () {
     var cardText = document.createTextNode("Library Card Number: ");
 
     var cardInput = document.createElement('input');
-    cardInput.type = "text";
+    cardInput.type = "number";
     cardInput.name = "cardNum";
     cardInput.className = "loginInput";
     cardInput.id = "cardInput";
@@ -41,6 +41,7 @@ var patronLogon = function () {
     var pinInput = document.createElement('input');
     pinInput.type = "password";
     pinInput.name = "pin";
+    pinInput.maxlength = 6;
     pinInput.className = "loginInput";
     pinInput.id = "pinInput";
 
@@ -169,6 +170,7 @@ var librarianLogon = function () {
     pinInput.type = "password";
     pinInput.className = "loginInput";
     pinInput.name = "pin";
+    pinInput.maxlength = 6;
     pinInput.id = "pinInput";
 
 

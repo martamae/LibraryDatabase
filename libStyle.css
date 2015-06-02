@@ -44,7 +44,7 @@ body
 {
     margin-left: 40px;
 }
-.homeButton, .searchButton, .logoutButton, .profileButton
+.homeButton, .searchButton, .logoutButton, .profileButton, .tableButton, .seeAll
 {
     padding:10px;
     border-radius: 10px;
@@ -98,7 +98,7 @@ a:hover
     font-size:75%;
     margin:0px;  
 }
-.logoutButton, .searchButton, .profileButton
+.logoutButton, .searchButton, .profileButton, .tableButton
 {
     font-size:90%;
 }
@@ -127,10 +127,6 @@ table
     border-style:solid;
     border-collapse:collapse;
 }
-th, td 
-{
-    width: 200px;
-}
 th
 {
     background-color:#66CDBA;
@@ -147,5 +143,19 @@ table, th, td
     border-width:1px;
     border-color:#C9CDCD;
 }
-
+.tableButton 
+{
+    margin:0px;
+    margin-left:10px;
+    margin-right:10px;
+}
+.error 
+{
+    margin-top: 10px;
+    margin-left:10px;
+}
+.seeAll 
+{
+   margin-left:300px;
+}
     
