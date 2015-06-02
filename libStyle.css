@@ -174,7 +174,7 @@ table, th, td
     margin-bottom:30px;
     font-size: 80%;
 }
-.inProfileInput, #pwCheck
+.inProfileInput, .profButton
 {
     font-size: 80%;
     margin:3px;

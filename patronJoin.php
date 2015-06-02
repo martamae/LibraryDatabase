@@ -24,7 +24,7 @@
                 $thirteenYrs = mktime(0, 0, 0, date("m"), date("d"), date("Y")-13);
                 $date = date("Y-m-d", $thirteenYrs);
 
-                echo '<input type="date" name="DOB" min="'.$date.'" required>';
+                echo '<input type="date" name="DOB" id="DOB" min="'.$date.'" required>';
             ?>
             <br>
             <input type="button" class="jButton" name="join" value="Join" onclick="validateJoin()">

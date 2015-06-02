@@ -27,17 +27,18 @@
     $password = $mysqli->query("SELECT pinNum FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'");
     $pw = $password->fetch_assoc();
 
-    //Check uniqueness of new pin
-    $unique = true;
-    $pins = $mysqli->query("SELECT pinNum FROM Person");
-    while ($row = $pins->fetch_assoc()){
-        if ($row['pinNum'] == $_POST['new']){
-            $unique = false;
-            break;
-        }
-    }
-
+    //If the user wants to change pin #
     if (isset($_POST['pwReplace'])) {
+        //Check uniqueness of new pin
+        $unique = true;
+        $pins = $mysqli->query("SELECT pinNum FROM Person");
+        while ($row = $pins->fetch_assoc()){
+            if ($row['pinNum'] == $_POST['new']){
+                $unique = false;
+                break;
+            }
+        }
+
         $length = strlen($_POST['new']);
 
        if ($length > 6 OR $length < 4) {
@@ -70,9 +71,31 @@
         }
     }
 
-//card
-$mysqli->query("DELETE FROM libraryCard WHERE libraryCardNum='".$_SESSION['cardNum']."'");
+    //If the user wants to delete their account
+    if(isset($_POST['deleteCheck'])) {
+        if ($_POST['pin'] == $pw['pinNum']) {
+            echo true;
+        }
+        else {
+            echo false;
+        }
+    }
 
-//Create new card
-$mysqli->query("INSERT INTO libraryCard");
+    if(isset($_POST['delete'])) {
+        //Delete the account
+        $pin = $_POST['pin'];
+
+        //Prepare statement
+        $statement = $mysqli->prepare("DELETE FROM Person WHERE pinNum = ?");
+
+        $statement->bind_param('i', $pin);
+
+        if($statement->execute()) {
+            //If the Person is deleted end session
+            $_SESSION = array();
+            session_destroy();
+            header("Location: libraryHome.php", true);
+            die();
+        }
+    }
 ?>

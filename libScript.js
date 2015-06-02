@@ -283,7 +283,6 @@ var pwForm = function () {
     //Create replace button
     var replaceButton = document.createElement('input');
     replaceButton.type = "button";
-    replaceButton.className = "replaceButton";
     replaceButton.value = "Replace";
     replaceButton.className = "inProfile";
     replaceButton.onclick = function () { checkPassword() };
@@ -293,7 +292,7 @@ var pwForm = function () {
     cancelButton.type = "button";
     cancelButton.className = "inProfile";
     cancelButton.value = "Cancel";
-    cancelButton.onclick = function () { cancelReplace() };
+    cancelButton.onclick = function () { cancel() };
 
     //Create form element
     var replaceForm = document.createElement('form');
@@ -368,10 +367,96 @@ var checkPassword = function () {
     message.innerHTML = "Processing...";
 }
 
-var cancelReplace = function () {
-    //If cancel button is clicked when changing pw
-    //Return to profile screen
+var cancel = function () {
+    //If cancel button is clicked 
     window.location.href = "patronProfile.php";
+}
+
+var deleteForm = function () {
+    //Delete delete button
+    var del = document.getElementById("deleteButton");
+    del.parentNode.removeChild(del);
+
+    //Get element to put form into
+    var parent = document.getElementById("delete");
+
+    //Generate form
+    //Create text input box pw
+    var pin = document.createElement("p");
+    pin.className = "inProfileInput";
+    pin.innerHTML = "Enter your pin number: ";
+
+    var pInput = document.createElement("input");
+    pInput.type = "password";
+    pInput.className = "inProfileInput";
+    pInput.id = "pinDel";
+
+    //Create delete button
+    var delButton = document.createElement('input');
+    delButton.type = "button";
+    delButton.className = "inProfile";
+    delButton.value = "Delete";
+    delButton.onclick = function () { checkPin() };
+
+    //Cancel Button
+    var cancelButton = document.createElement('input');
+    cancelButton.type = "button";
+    cancelButton.className = "inProfile";
+    cancelButton.value = "Cancel";
+    cancelButton.onclick = function () { cancel() };
+
+    //Create form element
+    var deleteForm = document.createElement('form');
+
+    //Append elements of form to the form
+    deleteForm.appendChild(pin);
+    deleteForm.appendChild(pInput);
+    deleteForm.appendChild(delButton);
+    deleteForm.appendChild(cancelButton);
+
+    //Append the form to the parent div
+    parent.appendChild(deleteForm);
+}
+
+var checkPin = function() {
+    var pin = document.getElementById("pinDel").value;
+
+    //Check pw value in php
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "deleteCheck=set&pin=" + pin;
+
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            var correct = req.responseText;
+
+            if(correct) {
+                var yes = confirm("Are you sure you want to delete you account?");
+
+                if(yes) {
+                }
+                else {
+                    cancel();
+                }
+             }
+             else  {
+                //If the users pw input is not valid
+                var message = document.getElementById("dMessage");
+                message.innerHTML = "Invalid pin entered";
+            }
+        }
+    };
+
+    req.open('POST', 'checkPW.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("dMessage");
+    message.innerHTML = "Processing...";
 }
 
 var validateJoin = function () {
@@ -388,13 +473,27 @@ var validateJoin = function () {
     }
     else {
         var message = document.getElementById("jMessage");
+        validateDate();
+    }
+}
+
+var validateDate = function () {
+    var date = document.getElementById("DOB").value;
+    
+    if (date == "") {
+        var message = document.getElementById("jMessage");
+        message.innerHTML = "Date field cannot be empty";
+    }
+    else {
         validatePin();
     }
 }
 
 var validatePin = function () {
-    var pinNum = document.getElementById('pinNum');
     var pinVal = document.getElementById('pinNum').value;
+    var fname = document.getElementById('fname').value;
+    var lName = document.getElementById('lname').value
+    var DOB = document.getElementById('DOB').value;
 
     if (pinVal == "") {
         var message = document.getElementById("jMessage");
@@ -407,7 +506,7 @@ var validatePin = function () {
             throw 'Unable to create HttpRequest.';
         }
 
-        var variablesToSend = "join=set&pinNum=" + pinVal;
+        var variablesToSend = "join=set&pinNum="+pinVal+"&fname="+fname+"&lname="+lname+"&DOB="+DOB;
 
         req.onreadystatechange = function () {
             if (this.readyState === 4 && req.status === 200) {
@@ -435,7 +534,7 @@ var validatePin = function () {
                 }
                 else if (correct == false) {
                     //If the users pw input is not valid
-                    var message = document.getElementById("pwMessage");
+                    var message = document.getElementById("jMessage");
                     message.innerHTML = "Invalid pin entered";
                 }
             }

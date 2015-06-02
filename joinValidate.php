@@ -24,15 +24,16 @@
         if ($length > 6 OR $length < 4) {
             echo "length";
         }
-    else if(!is_numeric($_POST['pinNum'])){
-        echo "num";
-    }
-    else if(!$unique){
-        echo "unique";
-    }
-//    else {
-//        //Prepare statement
-//        if (!($statement = $mysqli->prepare("UPDATE libraryCard SET pinNum=? WHERE pinNum=?"))) {
+         else if(!is_numeric($_POST['pinNum'])){
+            echo "num";
+        }
+        else if(!$unique){
+             echo "unique";
+        }
+        else {
+            //Create Person
+            //Prepare statement
+            //if (!($statement = $mysqli->prepare("SELECT "))) {
 //            echo "new";
 //        }
 //        else {
@@ -44,12 +45,6 @@
 //                echo true;
 //            }
 //        }
-//    }
+    }
 }
-
-//card
-$mysqli->query("DELETE FROM libraryCard WHERE libraryCardNum='".$_SESSION['cardNum']."'");
-
-//Create new card
-$mysqli->query("INSERT INTO libraryCard");
 ?>
