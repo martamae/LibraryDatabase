@@ -68,7 +68,7 @@ a:hover
 {
     margin-bottom:50px;
 }
-#message 
+#message, #pwMessage
 {
     color: #FC1469;
 }
@@ -169,6 +169,12 @@ table, th, td
     margin-bottom:50px;
     margin-left:20px;
     font-size: 60%;
+}
+.inProfileInput, #pwMessage
+{
+    margin: 0px;
+    margin-left:20px;
+    font-size: 80%;
 }
     
     

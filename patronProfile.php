@@ -100,13 +100,17 @@
 <div class="pProfile">
     <?php
         //Get info to print
-        $personInfo = $mysqli->query("SELECT id, fname, lname, libraryCardNum, pinNum FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'");
+        $personInfo = $mysqli->query("SELECT Person.id, fname, lname, libraryCardNum, Person.pinNum, libraryCard.dateIssued AS dateIssue FROM Person
+                                      INNER JOIN libraryCard ON libraryCard.id = Person.libraryCardNum
+                                      WHERE libraryCardNum='".$_SESSION['cardNum']."'");
         $profileInfo = $personInfo->fetch_assoc();
         echo "Name: " .$profileInfo['fname']. " " .$profileInfo['lname']. "<br>";
-        echo "Library Card Number: " .$profileInfo['libraryCardNum'];
+        echo "Library Card Number: " .$profileInfo['libraryCardNum']. "<br>";
+        echo "Date Issued: " .$profileInfo['dateIssue'];
     ?>
 
     <input type="button" class="inProfile" value="Replace Library Card" id="replace" onclick="pwForm()">
+    <p id="pwMessage"></p>
     <div id="pwCheck"></div>
 
     <?php

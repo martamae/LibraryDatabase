@@ -57,7 +57,6 @@ var patronLogon = function () {
 
     //Create form element
     var loginForm = document.createElement('form');
-    loginForm.method = "POST";
 
     //Append elements of form to the form
     loginForm.appendChild(cardPara);
@@ -184,6 +183,7 @@ var librarianLogon = function () {
 
     //Create form element
     var loginForm = document.createElement('form');
+    loginForm.method = "POST";
 
     //Append elements of form to the form
     loginForm.appendChild(userPara);
@@ -256,22 +256,103 @@ var pwForm = function () {
     var replace = document.getElementById("replace");
     replace.parentNode.removeChild(replace);
 
+    //Get element to put form into
+    var parent = document.getElementById("pwCheck");
+
     //Generate form
+    //Create text input box for old PW
+    var pwPrompt = document.createElement("p");
+    pwPrompt.className = "inProfileInput";
+    pwPrompt.innerHTML = "Enter your old pin: ";
+
     var pwInput = document.createElement("input");
     pwInput.type = "password";
-    pwInput.className = "inProfile";
-    pinInput.name = "pw";
-    pinInput.id = "pw";
+    pwInput.className = "inProfileInput";
+    pwInput.id = "pw";
+
+    //Create text input box for new PW
+    var newPWPrompt = document.createElement("p");
+    newPWPrompt.className = "inProfileInput";
+    newPWPrompt.innerHTML = "Enter your new pin: ";
+
+    var newPWInput = document.createElement("input");
+    newPWInput.type = "password";
+    newPWInput.className = "inProfileInput";
+    newPWInput.id = "newPW";
 
     //Create replace button
     var replaceButton = document.createElement('input');
     replaceButton.type = "button";
-    replaceButtonName = "replaceButton";
-    loginButton.value = "Replace";
-    loginButton.className = "inProfile";
-    loginButton.onclick = function () { checkPassword() };
+    replaceButton.className = "replaceButton";
+    replaceButton.value = "Replace";
+    replaceButton.className = "inProfile";
+    replaceButton.onclick = function () { checkPassword() };
+
+    //Cancel Button
+    var cancelButton = document.createElement('input');
+    cancelButton.type = "button";
+    cancelButton.className = "inProfile";
+    cancelButton.value = "Cancel";
+    cancelButton.onclick = function () { cancelReplace() };
+
+    //Create form element
+    var replaceForm = document.createElement('form');
+
+    //Append elements of form to the form
+    replaceForm.appendChild(pwPrompt);
+    replaceForm.appendChild(pwInput);
+    replaceForm.appendChild(newPWPrompt);
+    replaceForm.appendChild(newPWInput);
+    replaceForm.appendChild(replaceButton);
+    replaceForm.appendChild(cancelButton);
+
+    //Append the form to the parent div
+    parent.appendChild(replaceForm);
 }
 
 var checkPassword = function () {
-    
+    var pw = document.getElementById("pw").value;
+    var newPW = document.getElementById("newPW").value;
+
+    //Check pw value in php
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "pwReplace=set&pw="+pw+"&new="+newPW;
+
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            var correct = req.responseText;
+
+            console.log(correct);
+
+            if (correct == "length") {
+                //If the new input is not between 4-6 chars
+                var message = document.getElementById("pwMessage");
+                message.innerHTML = "Password needs to be between 4 and 6 characters";
+            }
+            else if (correct == true) {
+
+            }
+            else if (correct == false) {
+                //If the users input is not valid
+                var message = document.getElementById("pwMessage");
+                message.innerHTML = "Invalid password entered";
+            }
+        }
+    };
+
+    req.open('POST', 'checkPW.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("pwMessage");
+    message.innerHTML = "Processing...";
+}
+
+var cancelReplace = function () {
+    window.location.href = "patronProfile.php";
 }
