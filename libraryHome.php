@@ -21,7 +21,7 @@
 <body class="home">
 <div class="header"><h1>WELCOME TO THE LIBRARY</h1></div>
 <div class="loginChoice">
-    <div class="loginText"><p id="message"></p></div>
+    <div class="loginText"><p id="message" class="message"></p></div>
     <h2 class="loginText" id="loginHeader">Log in As:</h2>
     <div>
         <input type="button" value="Patron" onclick="patronLogon()" class="homeButton" id="patronButton">

@@ -342,6 +342,7 @@ var checkPassword = function () {
                 message.innerHTML = "New pin is invalid";
             }
             else if (correct == "num") {
+                //if new input is not a number
                 var message = document.getElementById("pwMessage");
                 message.innerHTML = "Pin must be a number";
             }
@@ -352,7 +353,7 @@ var checkPassword = function () {
                 
             }
             else if (correct == false) {
-                //If the users input is not valid
+                //If the users pw input is not valid
                 var message = document.getElementById("pwMessage");
                 message.innerHTML = "Invalid pin entered";
             }
@@ -368,5 +369,83 @@ var checkPassword = function () {
 }
 
 var cancelReplace = function () {
+    //If cancel button is clicked when changing pw
+    //Return to profile screen
     window.location.href = "patronProfile.php";
+}
+
+var validateJoin = function () {
+    var fname = document.getElementById('fname').value;
+    var lname = document.getElementById('lname').value;
+
+    if (fname == "") {
+        var message = document.getElementById("jMessage");
+        message.innerHTML = "Name field cannot be empty";
+    }
+    else if (lname == "") {
+        var message = document.getElementById("jMessage");
+        message.innerHTML = "Name field cannot be empty";
+    }
+    else {
+        var message = document.getElementById("jMessage");
+        validatePin();
+    }
+}
+
+var validatePin = function () {
+    var pinNum = document.getElementById('pinNum');
+    var pinVal = document.getElementById('pinNum').value;
+
+    if (pinVal == "") {
+        var message = document.getElementById("jMessage");
+        message.innerHTML = "Pin number field cannot be empty";
+    }
+    else {
+        var req = new XMLHttpRequest();
+
+        if (!req) {
+            throw 'Unable to create HttpRequest.';
+        }
+
+        var variablesToSend = "join=set&pinNum=" + pinVal;
+
+        req.onreadystatechange = function () {
+            if (this.readyState === 4 && req.status === 200) {
+                var correct = req.responseText;
+
+                if (correct == "length") {
+                    //If the input is not between 4-6 chars
+                    var message = document.getElementById("jMessage");
+                    message.innerHTML = "Pin needs to be between 4 and 6 characters";
+                }
+                else if (correct == "unique") {
+                    //If the input is not unique
+                    var message = document.getElementById("jMessage");
+                    message.innerHTML = "Pin is not unique";
+                }
+                else if (correct == "num") {
+                    //if input is not a number
+                    var message = document.getElementById("jMessage");
+                    message.innerHTML = "Pin must be a number";
+                }
+                else if (correct == true) {
+                    alert("Your password was successfully changes");
+
+                    // window.location.href = "patronProfile.php";
+                }
+                else if (correct == false) {
+                    //If the users pw input is not valid
+                    var message = document.getElementById("pwMessage");
+                    message.innerHTML = "Invalid pin entered";
+                }
+            }
+        };
+
+        req.open('POST', 'joinValidate.php', true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(variablesToSend);
+
+        var message = document.getElementById("jMessage");
+        message.innerHTML = "Processing...";
+    }
 }

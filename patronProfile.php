@@ -58,7 +58,7 @@
     <meta charset="UTF-8">
     <script src = 'libScript.js'></script>
     <link rel="Stylesheet" href="libStyle.css">
-    <title>Patron Homepage</title>
+    <title>Patron Profile</title>
 </head>
 <body class="phome">
 <!-- header of page -->
@@ -110,7 +110,7 @@
     ?>
     <div id="pwCheck">
         <input type="button" class="inProfile" value="Change Password" id="replace" onclick="pwForm()">
-        <p id="pwMessage"></p>
+        <p id="pwMessage" class="message"></p>
     </div>
 
     <?php

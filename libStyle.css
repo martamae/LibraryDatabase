@@ -21,7 +21,7 @@ body
     border-bottom-width:1px;
     color:#FBFBFB;
 }
-.loginChoice 
+.loginChoice, .joinLib
 {
     margin-top: 50px;
     background-color:#FBFBFB;
@@ -36,15 +36,20 @@ body
     margin-bottom:50px;
     text-align:left;
 }
-.loginText
+.loginText, .joinText
 { 
     margin-left:20px;
 }
-.loginInput
+.loginInput, .joinInput
 {
-    margin-left: 40px;
+    margin-left: 35px;
 }
-.homeButton, .searchButton, .logoutButton, .profileButton, .tableButton, .seeAll, .inProfile
+.joinInput > p 
+{
+    margin-bottom:5px;
+}
+.homeButton, .searchButton, .logoutButton, .profileButton, 
+.tableButton, .seeAll, .inProfile, .jButton
 {
     padding:10px;
     border-radius: 10px;
@@ -68,7 +73,7 @@ a:hover
 {
     margin-bottom:50px;
 }
-#message, #pwMessage
+.message
 {
     color: #FC1469;
 }
@@ -178,6 +183,11 @@ table, th, td
 #pwCheck
 {
     margin-top:30px;
+}
+.jButton 
+{
+    margin-top: 15px;
+    margin-left: 200px;
 }
     
     
