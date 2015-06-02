@@ -108,10 +108,10 @@
         echo "Library Card Number: " .$profileInfo['libraryCardNum']. "<br>";
         echo "Date Issued: " .$profileInfo['dateIssue'];
     ?>
-
-    <input type="button" class="inProfile" value="Replace Library Card" id="replace" onclick="pwForm()">
-    <p id="pwMessage"></p>
-    <div id="pwCheck"></div>
+    <div id="pwCheck">
+        <input type="button" class="inProfile" value="Change Password" id="replace" onclick="pwForm()">
+        <p id="pwMessage"></p>
+    </div>
 
     <?php
         echo "Books Checked Out:<br>";

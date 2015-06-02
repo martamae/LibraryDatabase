@@ -321,26 +321,40 @@ var checkPassword = function () {
         throw 'Unable to create HttpRequest.';
     }
 
-    var variablesToSend = "pwReplace=set&pw="+pw+"&new="+newPW;
+    var variablesToSend = "pwReplace=set&pw=" + pw + "&new=" + newPW;
 
     req.onreadystatechange = function () {
         if (this.readyState === 4 && req.status === 200) {
             var correct = req.responseText;
 
-            console.log(correct);
-
             if (correct == "length") {
                 //If the new input is not between 4-6 chars
                 var message = document.getElementById("pwMessage");
-                message.innerHTML = "Password needs to be between 4 and 6 characters";
+                message.innerHTML = "Pin needs to be between 4 and 6 characters";
+            }
+            else if (correct == "unique") {
+                //If the new input is not unique
+                var message = document.getElementById("pwMessage");
+                message.innerHTML = "Pin is not unique";
+            }
+            else if (correct == "new") {
+                var message = document.getElementById("pwMessage");
+                message.innerHTML = "New pin is invalid";
+            }
+            else if (correct == "num") {
+                var message = document.getElementById("pwMessage");
+                message.innerHTML = "Pin must be a number";
             }
             else if (correct == true) {
-
+                alert("Your password was successfully changes");
+                
+                window.location.href = "patronProfile.php";
+                
             }
             else if (correct == false) {
                 //If the users input is not valid
                 var message = document.getElementById("pwMessage");
-                message.innerHTML = "Invalid password entered";
+                message.innerHTML = "Invalid pin entered";
             }
         }
     };

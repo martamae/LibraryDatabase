@@ -166,15 +166,18 @@ table, th, td
 .inProfile
 {
     margin: 0px;
-    margin-bottom:50px;
-    margin-left:20px;
-    font-size: 60%;
-}
-.inProfileInput, #pwMessage
-{
-    margin: 0px;
-    margin-left:20px;
+    margin-bottom:30px;
     font-size: 80%;
+}
+.inProfileInput, #pwCheck
+{
+    font-size: 80%;
+    margin:3px;
+    margin-right: 10px;
+}
+#pwCheck
+{
+    margin-top:30px;
 }
     
     
