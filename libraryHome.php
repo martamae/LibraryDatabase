@@ -1,3 +1,15 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['cardNum'])) {
+        header("Location: patronHome.php");
+    }
+
+    if(isset($_SESSION['username'])) {
+        header("Location: librarianHome.php");
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>

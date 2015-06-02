@@ -1,9 +1,5 @@
 var patronLogon = function () {
     //Generates form to login
-    generatePatronForm();
-}
-
-var generatePatronForm = function () {
     //Change the header instruction
     var loginHeader = document.getElementById("loginHeader");
     loginHeader.innerHTML = "Patron Log in:";
@@ -83,7 +79,7 @@ var patronForm = function () {
 }
 
 var patronToPHP = function (cardNum, pin) {
-    var req = new XMLHttpRequest();
+var req = new XMLHttpRequest();
 
     if (!req) {
         throw 'Unable to create HttpRequest.';
@@ -98,6 +94,19 @@ var patronToPHP = function (cardNum, pin) {
             if (valid == true) {
                 //If the users input is valid login
                 //send to patron homepage
+                var request = new XMLHttpRequest();
+
+                if (!request) {
+                    throw 'Unable to create HttpRequest.';
+                }
+
+                var variablesToSend = "patronLog=set&cardNum=" + cardNum + "&pin=" + pin;
+
+                request.open('POST', 'patronHome.php', true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.send(variablesToSend);
+
+                //Go to patron homepage
                 window.location.href = "patronHome.php";
             }
             else if (valid == false) {
@@ -118,10 +127,6 @@ var patronToPHP = function (cardNum, pin) {
 
 var librarianLogon = function () {
     //Generate form to login
-    generateLibrarianForm();
-}
-
-var generateLibrarianForm = function () {
     //Change the header instruction
     var loginHeader = document.getElementById("loginHeader");
     loginHeader.innerHTML = "Librarian Log in:";
@@ -214,7 +219,20 @@ var librarianToPHP = function (username, pin) {
 
             if (valid == true) {
                 //If the users input is valid login
-                //send to patron homepage
+                //send to librarian homepage
+                var request = new XMLHttpRequest();
+
+                if (!request) {
+                    throw 'Unable to create HttpRequest.';
+                }
+
+                var variablesToSend = "librarianLog=set&username=" + username + "&pin=" + pin;
+
+                req.open('POST', 'librarianHome.php', true);
+                req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                req.send(variablesToSend);
+
+                //Go to librarian homepage
                 window.location.href = "librarianHome.php";
             }
             else if (valid == false) {

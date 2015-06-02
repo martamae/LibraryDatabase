@@ -9,7 +9,7 @@ body
 {
     text-align:center;
 }
-.header 
+.header, .pheader
 {
     padding: 25px;
     margin:0px;
@@ -43,7 +43,7 @@ body
 {
     margin-left: 40px;
 }
-.homeButton 
+.homeButton, .searchButton, .logoutButton, .profileButton
 {
     padding:10px;
     border-radius: 10px;
@@ -71,4 +71,53 @@ a:hover
 {
     color: #FC1469;
 }
+.phome 
+{
+    background-color: #FBFBFB; 
+}
+.pheader
+{
+    background-color: #E2E6E6;
+    height: 30px;
+    color:#4A4D4D;
+}
+.profileInfo, .logout, .profileLink
+{
+    float:left;
+    display:inline-block;
+
+}
+.profileInfo 
+{
+    margin-top:5px;
+}
+.profileInfo > p 
+{
+    font-size:75%;
+    margin:0px;  
+}
+.logoutButton, .searchButton, .profileButton
+{
+    font-size:90%;
+}
+.profileButton, .logoutButton 
+{
+    margin-left:5px;
+}
+.search
+{
+    float:right;
+    display:inline-block;
+}
+.searchInput
+{
+    font-weight:bold;
+    color:#4A4D4D;
+}
+.searchButton
+{
+    margin-left:0px;
+}
+
+
     
