@@ -16,7 +16,7 @@
             <input type="text" name="fname" id="fname">
             <p>Last name:</p>
             <input type="text" name="lname" id="lname">
-            <p>Pin number:</p>
+            <p>Four digit pin number:</p>
             <input type="password" name="pinNum" id="pinNum">
             <p>Birthday</p>
             <?php

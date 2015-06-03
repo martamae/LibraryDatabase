@@ -41,7 +41,7 @@
 
         $length = strlen($_POST['new']);
 
-       if ($length > 6 OR $length < 4) {
+       if ($length != 4) {
             echo "length";
        }
        else if(!is_numeric($_POST['new'])){
@@ -82,20 +82,29 @@
     }
 
     if(isset($_POST['delete'])) {
-        //Delete the account
+        //Get pin
         $pin = $_POST['pin'];
 
+        //Delete the library card
         //Prepare statement
-        $statement = $mysqli->prepare("DELETE FROM Person WHERE pinNum = ?");
+        $statement = $mysqli->prepare("DELETE FROM libraryCard WHERE pinNum = ?");
 
         $statement->bind_param('i', $pin);
 
-        if($statement->execute()) {
-            //If the Person is deleted end session
-            $_SESSION = array();
-            session_destroy();
-            header("Location: libraryHome.php", true);
-            die();
+        if ($statement->execute()) {
+            //Delete the account
+            //Prepare statement
+            $smt = $mysqli->prepare("DELETE FROM Person WHERE pinNum = ?");
+
+            $smt->bind_param('i', $pin);
+
+            if ($smt->execute()) {
+                //If the Person is deleted end session
+                $_SESSION = array();
+                session_destroy();
+                header("Location: libraryHome.php", true);
+                die();
+            }
         }
     }
 ?>

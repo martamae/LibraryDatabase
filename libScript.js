@@ -329,7 +329,7 @@ var checkPassword = function () {
             if (correct == "length") {
                 //If the new input is not between 4-6 chars
                 var message = document.getElementById("pwMessage");
-                message.innerHTML = "Pin needs to be between 4 and 6 characters";
+                message.innerHTML = "Pin needs to be 4 characters long";
             }
             else if (correct == "unique") {
                 //If the new input is not unique
@@ -418,10 +418,10 @@ var deleteForm = function () {
     parent.appendChild(deleteForm);
 }
 
-var checkPin = function() {
+var checkPin = function () {
     var pin = document.getElementById("pinDel").value;
 
-    //Check pw value in php
+    //Check pin value entered for delete in php
     var req = new XMLHttpRequest();
 
     if (!req) {
@@ -434,20 +434,50 @@ var checkPin = function() {
         if (this.readyState === 4 && req.status === 200) {
             var correct = req.responseText;
 
-            if(correct) {
+            if (correct) {
+                //confirm the user wantes to delete their account
                 var yes = confirm("Are you sure you want to delete you account?");
 
-                if(yes) {
+                if (yes) {
+                    deleteAccount();
                 }
                 else {
                     cancel();
                 }
-             }
-             else  {
-                //If the users pw input is not valid
+            }
+            else {
+                //If the users pin input is not valid
                 var message = document.getElementById("dMessage");
                 message.innerHTML = "Invalid pin entered";
             }
+        }
+    };
+
+    req.open('POST', 'checkPW.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("dMessage");
+    message.innerHTML = "Processing...";
+}
+
+var deleteAccount = function () {
+    var pin = document.getElementById("pinDel").value;
+    console.log(pin)
+
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "delete=set&pin=" + pin;
+
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            alert("Your account has been deleted");
+
+            window.location.href = "patronLibrary.php";
         }
     };
 
@@ -463,6 +493,7 @@ var validateJoin = function () {
     var fname = document.getElementById('fname').value;
     var lname = document.getElementById('lname').value;
 
+    //Validates that the user entered a fname and lname
     if (fname == "") {
         var message = document.getElementById("jMessage");
         message.innerHTML = "Name field cannot be empty";
@@ -480,6 +511,7 @@ var validateJoin = function () {
 var validateDate = function () {
     var date = document.getElementById("DOB").value;
     
+    //Validate that the user entered a date
     if (date == "") {
         var message = document.getElementById("jMessage");
         message.innerHTML = "Date field cannot be empty";
@@ -492,9 +524,10 @@ var validateDate = function () {
 var validatePin = function () {
     var pinVal = document.getElementById('pinNum').value;
     var fname = document.getElementById('fname').value;
-    var lName = document.getElementById('lname').value
+    var lname = document.getElementById('lname').value;
     var DOB = document.getElementById('DOB').value;
 
+    //validate the user entered a pin
     if (pinVal == "") {
         var message = document.getElementById("jMessage");
         message.innerHTML = "Pin number field cannot be empty";
@@ -506,36 +539,38 @@ var validatePin = function () {
             throw 'Unable to create HttpRequest.';
         }
 
-        var variablesToSend = "join=set&pinNum="+pinVal+"&fname="+fname+"&lname="+lname+"&DOB="+DOB;
+        var variablesToSend = "join=set&pinNum=" + pinVal + "&fname=" + fname + "&lname=" + lname + "&DOB=" + DOB;
 
         req.onreadystatechange = function () {
             if (this.readyState === 4 && req.status === 200) {
-                var correct = req.responseText;
+                var cardNum = req.responseText;
 
-                if (correct == "length") {
-                    //If the input is not between 4-6 chars
+                //Validate the pin is right length, not
+                //non-numeric and is unique
+                if (cardNum == "length") {
+                    //If the input is not 4 char
                     var message = document.getElementById("jMessage");
-                    message.innerHTML = "Pin needs to be between 4 and 6 characters";
+                    message.innerHTML = "Pin needs to be 4 characters long";
                 }
-                else if (correct == "unique") {
+                else if (cardNum == "unique") {
                     //If the input is not unique
                     var message = document.getElementById("jMessage");
                     message.innerHTML = "Pin is not unique";
                 }
-                else if (correct == "num") {
+                else if (cardNum == "num") {
                     //if input is not a number
                     var message = document.getElementById("jMessage");
                     message.innerHTML = "Pin must be a number";
                 }
-                else if (correct == true) {
-                    alert("Your password was successfully changes");
-
-                    // window.location.href = "patronProfile.php";
-                }
-                else if (correct == false) {
+                else if (cardNum == false) {
                     //If the users pw input is not valid
                     var message = document.getElementById("jMessage");
-                    message.innerHTML = "Invalid pin entered";
+                    message.innerHTML = "Problem creating account. Try again";
+                }
+                else {
+                    alert("Welcome to the library!\n Your library card number is: " + cardNum);
+
+                    window.location.href = "patronHome.php";
                 }
             }
         };
