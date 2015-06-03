@@ -27,8 +27,45 @@
     $password = $mysqli->query("SELECT pinNum FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'");
     $pw = $password->fetch_assoc();
 
+
+
+    if(isset($_POST['replace'])) {
+        //Check that pin is correct
+        if ($_POST['pin'] == $pw['pinNum']) {
+            //If pin is correct replace card
+            //Get id of user
+            $getId = $mysqli->query("SELECT id FROM Person WHERE libraryCardNum='".$_SESSION['cardNum']."'");
+            $person = $getId->fetch_assoc();
+
+            //Delete old card
+            $mysqli->query("DELETE FROM libraryCard WHERE id='".$_SESSION['cardNum']."'");
+
+            //Create new card
+            $mysqli->query("INSERT INTO libraryCard(pinNum, dateIssued) VALUES ('".$pw['pinNum']."', CURDATE())");
+
+            //Update user with new card info
+            $mysqli->query("UPDATE Person SET
+                            libraryCardNum=(SELECT libraryCard.id FROM libraryCard WHERE pinNum='".$pw['pinNum']."'),
+                            pinNum='".$pw['pinNum']."' WHERE Person.id='".$person['id']."'");
+
+            //Update session variable
+           $getNum = $mysqli->query("SELECT libraryCard.id FROM libraryCard WHERE pinNum='".$pw['pinNum']."'");
+            $num = $getNum->fetch_assoc();
+
+            //Set session variable
+           $_SESSION['cardNum'] = $num['id'];
+
+            //echo cardNum
+            echo $num['id'];
+        }
+        else {
+            //if pin is incorrect echo false
+            echo false;
+        }
+    }
+
     //If the user wants to change pin #
-    if (isset($_POST['pwReplace'])) {
+    if (isset($_POST['pwchange'])) {
         //Check uniqueness of new pin
         $unique = true;
         $pins = $mysqli->query("SELECT pinNum FROM Person");
@@ -71,7 +108,7 @@
         }
     }
 
-    //If the user wants to delete their account
+    //Check that password is correct
     if(isset($_POST['deleteCheck'])) {
         if ($_POST['pin'] == $pw['pinNum']) {
             echo true;

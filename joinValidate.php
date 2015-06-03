@@ -61,7 +61,7 @@
                                      echo false;
                                  }
                                  else {
-                                     //select card number to print to user
+                                     //select card number to start session and print to user
                                      $num = $mysqli->query("SELECT id FROM libraryCard WHERE pinNum='".$_POST['pinNum']."'");
                                      $cardNum = $num->fetch_assoc();
 

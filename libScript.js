@@ -1,3 +1,4 @@
+//LOGON FUNCTIONS
 var patronLogon = function () {
     //Generates form to login
     //Change the header instruction
@@ -78,7 +79,7 @@ var patronForm = function () {
 }
 
 var patronToPHP = function (cardNum, pin) {
-var req = new XMLHttpRequest();
+    var req = new XMLHttpRequest();
 
     if (!req) {
         throw 'Unable to create HttpRequest.';
@@ -251,10 +252,102 @@ var librarianToPHP = function (username, pin) {
     message.innerHTML = "Processing...";
 }
 
-var pwForm = function () {
-    //Delete replace button
-    var replace = document.getElementById("replace");
+//PATRON PROFILE FUNCTIONS
+var newCardForm = function () {
+    //Creates form to replace library card
+
+    //Delete change button
+    var replace = document.getElementById("replaceButton");
     replace.parentNode.removeChild(replace);
+
+    //Get element to put form into
+    var parent = document.getElementById("newCard");
+
+    //Generate form
+    //Create text input box for Password
+    var newPrompt = document.createElement("p");
+    newPrompt.className = "inProfileInput";
+    newPrompt.innerHTML = "Enter your pin: ";
+
+    var newInput = document.createElement("input");
+    newInput.type = "password";
+    newInput.className = "inProfileInput";
+    newInput.id = "newip";
+
+    //Create get new button
+    var replaceButton = document.createElement('input');
+    replaceButton.type = "button";
+    replaceButton.value = "Replace";
+    replaceButton.className = "inProfile";
+    replaceButton.onclick = function () { pinValidReplace() };
+
+    //Cancel Button
+    var cancelButton = document.createElement('input');
+    cancelButton.type = "button";
+    cancelButton.className = "inProfile";
+    cancelButton.value = "Cancel";
+    cancelButton.onclick = function () { cancel() };
+
+    //Create form element
+    var replaceForm = document.createElement('form');
+
+    //Append elements of form to the form
+    replaceForm.appendChild(newPrompt);
+    replaceForm.appendChild(newInput);
+    replaceForm.appendChild(replaceButton);
+    replaceForm.appendChild(cancelButton);
+
+    //Append the form to the parent div
+    parent.appendChild(replaceForm);
+}
+
+var pinValidReplace = function () {
+    //Checks password for replace library card
+    //If pin is valid the library card is replace
+
+    var pin = document.getElementById("newip").value;
+
+    //Check pin value entered for delete in php
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "replace=set&pin=" + pin;
+
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            var newNum = req.responseText;
+
+            if (newNum == false) {
+                //If the users pin input is not valid
+                var message = document.getElementById("cardMessage");
+                message.innerHTML = "Invalid pin entered";
+            }
+            else {
+                //If pin was valid print new card number
+                alert("Your library card has been replace\n You new card number is: " + newNum);
+
+                window.location.href = "patronProfile.php";
+            }
+        }
+    };
+
+    req.open('POST', 'checkPW.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("cardMessage");
+    message.innerHTML = "Processing...";
+}
+
+var pwForm = function () {
+    //Creates form to update password
+
+    //Delete change button
+    var change = document.getElementById("change");
+    change.parentNode.removeChild(change);
 
     //Get element to put form into
     var parent = document.getElementById("pwCheck");
@@ -281,11 +374,11 @@ var pwForm = function () {
     newPWInput.id = "newPW";
 
     //Create replace button
-    var replaceButton = document.createElement('input');
-    replaceButton.type = "button";
-    replaceButton.value = "Replace";
-    replaceButton.className = "inProfile";
-    replaceButton.onclick = function () { checkPassword() };
+    var changeButton = document.createElement('input');
+    changeButton.type = "button";
+    changeButton.value = "Change";
+    changeButton.className = "inProfile";
+    changeButton.onclick = function () { checkPassword() };
 
     //Cancel Button
     var cancelButton = document.createElement('input');
@@ -295,21 +388,24 @@ var pwForm = function () {
     cancelButton.onclick = function () { cancel() };
 
     //Create form element
-    var replaceForm = document.createElement('form');
+    var changeForm = document.createElement('form');
 
     //Append elements of form to the form
-    replaceForm.appendChild(pwPrompt);
-    replaceForm.appendChild(pwInput);
-    replaceForm.appendChild(newPWPrompt);
-    replaceForm.appendChild(newPWInput);
-    replaceForm.appendChild(replaceButton);
-    replaceForm.appendChild(cancelButton);
+    changeForm.appendChild(pwPrompt);
+    changeForm.appendChild(pwInput);
+    changeForm.appendChild(newPWPrompt);
+    changeForm.appendChild(newPWInput);
+    changeForm.appendChild(changeButton);
+    changeForm.appendChild(cancelButton);
 
     //Append the form to the parent div
-    parent.appendChild(replaceForm);
+    parent.appendChild(changeForm);
 }
 
 var checkPassword = function () {
+    //Checks old and new password input for password update
+    //If input is valid password is changed
+
     var pw = document.getElementById("pw").value;
     var newPW = document.getElementById("newPW").value;
 
@@ -320,7 +416,7 @@ var checkPassword = function () {
         throw 'Unable to create HttpRequest.';
     }
 
-    var variablesToSend = "pwReplace=set&pw=" + pw + "&new=" + newPW;
+    var variablesToSend = "pwchange=set&pw=" + pw + "&new=" + newPW;
 
     req.onreadystatechange = function () {
         if (this.readyState === 4 && req.status === 200) {
@@ -348,8 +444,7 @@ var checkPassword = function () {
             else if (correct == true) {
                 alert("Your password was successfully changes");
                 
-                window.location.href = "patronProfile.php";
-                
+                window.location.href = "patronProfile.php"; 
             }
             else if (correct == false) {
                 //If the users pw input is not valid
@@ -373,6 +468,8 @@ var cancel = function () {
 }
 
 var deleteForm = function () {
+    //Creates form to delete account
+
     //Delete delete button
     var del = document.getElementById("deleteButton");
     del.parentNode.removeChild(del);
@@ -419,6 +516,9 @@ var deleteForm = function () {
 }
 
 var checkPin = function () {
+    //Checks pin input for account delete
+    //If the pin input is valid user confirms they want to delete account
+
     var pin = document.getElementById("pinDel").value;
 
     //Check pin value entered for delete in php
@@ -462,6 +562,8 @@ var checkPin = function () {
 }
 
 var deleteAccount = function () {
+    //Deletes users account
+
     var pin = document.getElementById("pinDel").value;
     console.log(pin)
 
@@ -489,6 +591,7 @@ var deleteAccount = function () {
     message.innerHTML = "Processing...";
 }
 
+//PATRON JOIN FUNCTIONS
 var validateJoin = function () {
     var fname = document.getElementById('fname').value;
     var lname = document.getElementById('lname').value;
@@ -522,6 +625,8 @@ var validateDate = function () {
 }
 
 var validatePin = function () {
+    //Validates pin input for patron join
+
     var pinVal = document.getElementById('pinNum').value;
     var fname = document.getElementById('fname').value;
     var lname = document.getElementById('lname').value;
