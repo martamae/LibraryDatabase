@@ -234,7 +234,7 @@ var librarianToPHP = function (username, pin) {
                 req.send(variablesToSend);
 
                 //Go to librarian homepage
-                window.location.href = "librarianHome.php";
+                 window.location.href = "librarianHome.php";
             }
             else if (valid == false) {
                 //If the users input is not valid
@@ -686,5 +686,40 @@ var validatePin = function () {
 
         var message = document.getElementById("jMessage");
         message.innerHTML = "Processing...";
+    }
+}
+
+//LIBRARIAN HOME FUNCTIONS
+var deleteBook = function (button) {
+    //Librarian deletes book from library
+    var bookId = button.value;
+    var bookName = button.name;
+
+    //confirms the user wants to delete the book
+    var sure = confirm("Are you sure you want to delete " + bookName + " from the library?");
+
+    //If the user confirms delete book
+    if (sure) {
+        //Send request to php
+        var req = new XMLHttpRequest();
+
+        if (!req) {
+            throw 'Unable to create HttpRequest.';
+        }
+
+        var variablesToSend = "deleteBook=" + bookId;
+        req.onreadystatechange = function () {
+            if (this.readyState === 4 && req.status === 200) {
+                //When book has been deleted print success message
+                alert(bookName + " has been deleted from the library");
+
+                location.reload();
+            }
+        };
+
+        req.open('POST', 'librarianHome.php', true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(variablesToSend);
+
     }
 }
