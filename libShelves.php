@@ -37,7 +37,7 @@
     <meta charset="UTF-8">
     <script src = 'libScript.js'></script>
     <link rel="Stylesheet" href="libStyle.css">
-    <title>Librarian Homepage</title>
+    <title>Library Shelves</title>
 </head>
 <body class="phome">
 <!-- header of page -->
@@ -71,7 +71,7 @@
 
     <!-- Button to shelves page -->
     <div class="profileLink">
-        <a href="libShelves.php"><input type="button" class="profileButton" value="Shelves"></a>
+        <a href="librarianHome.php"><input type="button" class="profileButton" value="Inventory"></a>
     </div>
 
     <!-- Button to logout -->
@@ -83,7 +83,7 @@
 <div class="lheader">
     <!-- Button to add shelf -->
     <div class="profileLink">
-        <a href="updateShelf.php"><input type="button" class="lButton" value="Update/Add Shelves"></a>
+        <a href="addShelf.php"><input type="button" class="lButton" value="Add Shelf"></a>
     </div>
 </div>
 

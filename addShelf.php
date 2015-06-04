@@ -4,7 +4,7 @@
     session_start();
 
     if(session_status() == PHP_SESSION_ACTIVE) {
-        if (!isset($_SESSION['username'])) {
+         if (!isset($_SESSION['username'])) {
             //If a patron is logging on save cardNum in session storage
             if (isset($_POST['username'])) {
                 $_SESSION['username'] = $_POST['username'];
@@ -22,6 +22,7 @@
     if (!$mysqli|| $mysqli->connect_errno) {
         echo "Failed to connect:" . $mysqli->connect_errno . " " . $mysqli->connect_error;
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +31,7 @@
     <meta charset="UTF-8">
     <script src = 'libScript.js'></script>
     <link rel="Stylesheet" href="libStyle.css">
-    <title>Add Book</title>
+    <title>Add Shelf</title>
 </head>
 <body class="phome">
 <!-- header of page -->
@@ -79,49 +80,69 @@
     </div>
 </div>
 
+<?php
+//Adding shelf
+if(isset($_POST['location'])){
+    echo $_POST['location'] . $_POST['floorNum'];
+    //Create new shelf
+    if(!($statement = $mysqli->prepare("INSERT INTO Shelf(location, floorNum) VALUES (?, ?)"))) {
+        echo "false2";
+    }
+
+    if(!($statement->bind_param('si', $_POST['location'], $_POST['floorNum']))) {
+        "echo false";
+    }
+
+    if (!($statement->execute())) {
+        echo "false3";
+    }
+
+    $genres = $mysqli->query("SELECT distinct genre FROM Book");
+
+    while($row = $genres->fetch_assoc() ){
+        if (isset($_POST[$row['genre']])) {
+            $moveBooks = $mysqli->query("SELECT id FROM Book WHERE genre='".$row['genre']."'");
+
+            while($bookRow = $moveBooks->fetch_assoc()) {
+                //Select books with that genre and move to new shelf
+                $mysqli->query("UPDATE Book SET shelf=(SELECT max(id) FROM shelf)
+                                WHERE id ='".$bookRow['id']."'");
+            }
+        }
+    }
+
+    echo '<p class="error">Shelf successfully added</p>';
+}
+?>
+
 <div class="addBookSect">
     <div class="joinText">
         <div class="joinInput"><p class="message" id="addMessage"></p></div>
         <!--Form to add a book-->
-        <form class="joinInput" method="POST" >
-            <!--Input title and author name-->
-            <p>Title:</p>
-            <input type="text" name="title" id="title">
-            <p>Author First name:</p>
-            <input type="text" name="fname" id="fname">
-            <p>Author Last name:</p>
-            <input type="text" name="lname" id="lname">
-            <p>Description:</p>
-            <textarea name="description" id="description"></textarea>
-            <p>Genre:</p>
-            <p id="selectGenre" class="addText"><select name="genre" id="genreChoice">
-                <?php
-                    //Get list of genres to print
-                    $genres = $mysqli->query("SELECT distinct genre FROM Book");
-
-                    while($row = $genres->fetch_assoc()) {
-                        echo '<option value="'.$row['genre'].'">'.$row['genre'].'</option>';
-                    }
-                ?>
+        <form name="addShelf" class="joinInput" method="POST" >
+           <!--Location and floor number input-->
+            <p>Location:</p>
+            <select name="location">
+                <option value="West Wing">West Wing</option>
+                <option value="East Wing">East Wing</option>
+                <option value="North Wing">North Wing</option>
+                <option value="South Wing">South Wing</option>
             </select>
-             <!--Or the user can input own genre-->
-            -OR-
-            <input type="button" class="inProfile" value="Add New Genre" onclick="addNewGenre()"></p>
-            <input id="addGenreText" type="hidden" name="genreTxt">
-            <p hidden id="shelftxt">Select shelf for this genre:</p>
-            <select hidden name="shelf" id="shelf">
-                <?php
-                    //Get list of shelves w/locations
-                    $shelves = $mysqli->query("SELECT id, location, floorNum FROM Shelf");
-
-                    while ($row = $shelves->fetch_assoc()) {
-                        echo '<option value="'.$row['id'].'">'.$row['id'].': Floor '.$row['floorNum'].' '.$row['location'].'</option>';
-                    }
-                ?>
+            <p>Floor Number:</p>
+            <select name="floorNum">
+                <option value="1">Floor 1</option>
+                <option value="2">Floor 2</option>
             </select>
+            <p>Genres to move to shelf:</p>
+            <?php
+                $genres = $mysqli->query("SELECT distinct genre FROM Book");
+                while($row = $genres->fetch_assoc()) {
+                    echo '<input type=checkbox name="' . $row['genre'].'">  ' . $row['genre'] .'<br>';
+                }
+            ?>
 
             <br>
-            <input type="button" class="bButton" name="addButton" id="addGenButton" value="Add Book" onclick="addValidate()">
+            <input type="submit" class="bButton" name="addShelfButton" value="Add Shelf">
         </form>
     </div>
 </div>
