@@ -951,4 +951,112 @@ var removeShelf = function (button) {
         req.send(variablesToSend);
     }
 }
+
+//CREATE LIBRARIAN FUNCTIONS
+var validateCreate = function () {
+    var fname = document.getElementById('fname').value;
+    var lname = document.getElementById('lname').value;
+
+    //Validates that the user entered a fname and lname
+    if (fname == "") {
+        var message = document.getElementById("createMessage");
+        message.innerHTML = "Name field cannot be empty";
+    }
+    else if (lname == "") {
+        var message = document.getElementById("createMessage");
+        message.innerHTML = "Name field cannot be empty";
+    }
+    else {
+        var message = document.getElementById("createMessage");
+        validateCreateDate();
+    }
+}
+
+var validateCreateDate = function () {
+    var date = document.getElementById("DOB").value;
+
+    //Validate that the user entered a date
+    if (date == "") {
+        var message = document.getElementById("createMessage");
+        message.innerHTML = "Date field cannot be empty";
+    }
+    else {
+        validateUNPin();
+    }
+}
+
+var validateUNPin = function () {
+    //Validates pin input for patron join
+
+    var pinVal = document.getElementById('pinNum').value;
+    var username = document.getElementById('username').value;
+    var fname = document.getElementById('fname').value;
+    var lname = document.getElementById('lname').value;
+    var DOB = document.getElementById('DOB').value;
+
+    //validate the user entered a pin
+    if (pinVal == "") {
+        var message = document.getElementById("createMessage");
+        message.innerHTML = "Pin number field cannot be empty";
+    }
+    else if (username == "") {
+        var message = document.getElementById("createMessage");
+        message.innerHTML = "Username field cannot be empty";
+    }
+    else {
+        var req = new XMLHttpRequest();
+
+        if (!req) {
+            throw 'Unable to create HttpRequest.';
+        }
+
+        var variablesToSend = "create=set&pinNum=" + pinVal + "&fname=" + fname + "&lname=" + lname + "&DOB=" + DOB + "&username=" + username;
+
+        req.onreadystatechange = function () {
+            if (this.readyState === 4 && req.status === 200) {
+                var created = req.responseText;
+
+                //Validate the pin is right length, not
+                //non-numeric and is unique
+                if (created == "length") {
+                    //If the pin input is not 4 char
+                    var message = document.getElementById("createMessage");
+                    message.innerHTML = "Pin needs to be 4 characters long";
+                }
+                else if (created == "unique") {
+                    //If the pin input is not unique
+                    var message = document.getElementById("createMessage");
+                    message.innerHTML = "Pin is not unique";
+                }
+                else if (created == "uniqueUN") {
+                    //If the username input is not unique
+                    var message = document.getElementById("createMessage");
+                    message.innerHTML = "Username is not unique";
+                }
+                else if (created == "num") {
+                    //if pin input is not a number
+                    var message = document.getElementById("createMessage");
+                    message.innerHTML = "Pin must be a number";
+                }
+                else if (created == false) {
+                    //If the users pw input is not valid
+                    var message = document.getElementById("createMessage");
+                    message.innerHTML = "Problem creating account. Try again";
+                }
+                else {
+                    alert("Welcome to the library!");
+
+                    window.location.href = "librarianHome.php";
+                }
+            }
+        };
+
+        req.open('POST', 'joinValidate.php', true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(variablesToSend);
+
+        var message = document.getElementById("createMessage");
+        message.innerHTML = "Processing...";
+    }
+}
     
