@@ -115,7 +115,7 @@
     </div>
     <!--Button to change password-->
     <div id="pwCheck" class="profButton">
-        <input type="button" class="inProfile" value="Change Password" id="change" onclick="pwForm()">
+        <input type="button" class="inProfile" value="Change Pin" id="change" onclick="pwForm()">
         <p id="pwMessage" class="message"></p>
     </div>
     <!--Button to delete account-->
