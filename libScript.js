@@ -252,7 +252,7 @@ var librarianToPHP = function (username, pin) {
     message.innerHTML = "Processing...";
 }
 
-//PATRON PROFILE FUNCTIONS
+//PATRON AND LIBRARIAN PROFILE FUNCTIONS
 var newCardForm = function () {
     //Creates form to replace library card
 
@@ -565,7 +565,6 @@ var deleteAccount = function () {
     //Deletes users account
 
     var pin = document.getElementById("pinDel").value;
-    console.log(pin)
 
     var req = new XMLHttpRequest();
 
@@ -579,7 +578,7 @@ var deleteAccount = function () {
         if (this.readyState === 4 && req.status === 200) {
             alert("Your account has been deleted");
 
-            window.location.href = "patronLibrary.php";
+            window.location.href = "libraryHome.php";
         }
     };
 
@@ -721,5 +720,61 @@ var deleteBook = function (button) {
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.send(variablesToSend);
 
+    }
+}
+
+//ADD BOOK FUNCTIONS
+var addNewGenre = function () {
+    //Adds input field to add book page to get genre
+    var selectList = document.getElementById("selectGenre");
+
+    //Delete select list
+    selectList.parentNode.removeChild(selectList);
+
+    //get input field
+    var genreInput = document.getElementById("addGenreText");
+    genreInput.type = "text";
+
+    //Get shelf input
+    var shelf = document.getElementById("shelf");
+    var shelftxt = document.getElementById("shelftxt");
+    shelf.hidden = false;
+    shelftxt.hidden = false;
+
+    //change onclick
+    var button = document.getElementById("addGenButton");
+    button.onclick = function () { addValidateNewGenre() };
+}
+
+var addValidateNewGenre = function () {
+    var genre = document.getElementById("addGenreText").value;
+
+    if(genre == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Genre field cannot be left empty";
+    }
+    else {
+        addValidate();
+    }
+}
+
+var addValidate = function () {
+    //Get elements
+    var title = document.getElementById("title").value;
+    var fname = document.getElementById("fname").value;
+    var lname = document.getElementById("lname").value;
+
+    //Check that elements are not empty
+    if (title == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Title field cannot be left empty";
+    }
+    else if (fname == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Author name field cannot be left empty";
+    }
+    else if (lname == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Author name field cannot be left empty";
     }
 }

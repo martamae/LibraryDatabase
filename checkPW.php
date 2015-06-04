@@ -189,19 +189,11 @@ else if(isset($_SESSION['username'])) {
         $statement->bind_param('i', $pin);
 
         if ($statement->execute()) {
-            //Delete the account
-            //Prepare statement
-            $smt = $mysqli->prepare("DELETE FROM librarian WHERE pinNum = ?");
-
-            $smt->bind_param('i', $pin);
-
-            if ($smt->execute()) {
-                //If the Person is deleted end session
-                $_SESSION = array();
-                session_destroy();
-                header("Location: libraryHome.php", true);
-                die();
-            }
+            //If the Librarian is deleted end session
+            $_SESSION = array();
+            session_destroy();
+            header("Location: libraryHome.php", true);
+            die();
         }
     }
 }

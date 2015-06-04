@@ -98,7 +98,7 @@
                 <option value="genre">Genre</option>
                 <option value="description">Description</option>
             </select>
-            <input type="submit"class="searchButton" value="Search Inventory" name="search">
+            <input type="submit" class="searchButton" value="Search Inventory" name="search">
         </form>
     </div>
 </div>

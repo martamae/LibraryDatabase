@@ -21,7 +21,7 @@ body
     border-bottom-width:1px;
     color:#FBFBFB;
 }
-.loginChoice, .joinLib
+.loginChoice, .joinLib, .addBookSect
 {
     margin-top: 50px;
     background-color:#FBFBFB;
@@ -49,7 +49,7 @@ body
     margin-bottom:5px;
 }
 .homeButton, .searchButton, .logoutButton, .profileButton, 
-.tableButton, .seeAll, .inProfile, .jButton
+.tableButton, .seeAll, .inProfile, .jButton, .bButton
 {
     padding:10px;
     border-radius: 10px;
@@ -180,10 +180,22 @@ table, th, td
     margin:3px;
     margin-right: 10px;
 }
-.jButton 
+.jButton
 {
     margin-top: 15px;
     margin-left: 200px;
 }
-    
+.addBookSect 
+{
+    background-color:White;
+}
+.addText 
+{
+    margin:0px;
+}    
+.bButton 
+{
+    margin-top:15px;
+    margin-left:50px;
+}
     
