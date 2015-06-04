@@ -443,8 +443,8 @@ var checkPassword = function () {
             }
             else if (correct == true) {
                 alert("Your password was successfully changes");
-                
-                window.location.href = "patronProfile.php"; 
+
+                location.reload();
             }
             else if (correct == false) {
                 //If the users pw input is not valid
@@ -464,7 +464,7 @@ var checkPassword = function () {
 
 var cancel = function () {
     //If cancel button is clicked 
-    window.location.href = "patronProfile.php";
+    location.reload();
 }
 
 var deleteForm = function () {

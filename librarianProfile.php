@@ -99,7 +99,16 @@
         echo "Date started: " .$profileInfo['startDate'];
     ?>
 
-    
+    <div id="pwCheck" class="profButton">
+        <input type="button" class="inProfile" value="Change Pin" id="change" onclick="pwForm()">
+        <p id="pwMessage" class="message"></p>
+    </div>
+
+    <!--Button to delete account-->
+    <div id="delete" class="profButton">
+        <input type="button" class="inProfile" value="Delete Account" id="deleteButton" onclick="deleteForm()">
+        <p id="dMessage" class="message"></p>
+    </div>
 
 
     <?php
