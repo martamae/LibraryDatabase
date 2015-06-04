@@ -105,7 +105,7 @@ if(isset($_POST['location'])){
 
             while($bookRow = $moveBooks->fetch_assoc()) {
                 //Select books with that genre and move to new shelf
-                $mysqli->query("UPDATE Book SET shelf=(SELECT max(id) FROM shelf)
+                $mysqli->query("UPDATE Book SET shelf=(SELECT max(id) FROM Shelf)
                                 WHERE id ='".$bookRow['id']."'");
             }
         }

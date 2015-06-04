@@ -911,4 +911,44 @@ var addBookNewGen = function() {
     var message = document.getElementById("addMessage");
     message.innerHTML = "Processing...";
 }
+
+//LIBRARIAN SHELF FUNCTION
+var removeShelf = function (button) {
+    //Librarian deletes shelf from library
+    var id = button.value;
+
+    //confirms the user wants to delete the book
+    var sure = confirm("Are you sure you want to remove this shelf?");
+
+    //If the user confirms delete shelf
+    if (sure) {
+        //Send request to php
+        var req = new XMLHttpRequest();
+
+        if (!req) {
+            throw 'Unable to create HttpRequest.';
+        }
+
+        var variablesToSend = "removeShelf=" + id;
+        req.onreadystatechange = function () {
+            if (this.readyState === 4 && req.status === 200) {
+                var rm = req.responseText;
+
+                if (rm == "full") {
+                    alert("You  cannot delete a shelf with books on it");
+                }
+                else if (rm == true) {
+                    //When book has been deleted print success message
+                    alert("The shelf has been removed from the library");
+
+                    location.reload();
+                }
+            }
+        };
+
+        req.open('POST', 'addBookShelf.php', true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(variablesToSend);
+    }
+}
     

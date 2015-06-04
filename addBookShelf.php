@@ -110,6 +110,18 @@
                 }
             }
         }
+        else if(isset($_POST['removeShelf'])) {
+            $full = $mysqli->query("SELECT id FROM Book WHERE shelf='".$_POST['removeShelf']."'");
+            $bookNum = mysqli_num_rows($full);
+
+            if($bookNum != 0) {
+                echo "full";
+            }
+            else {
+                $mysqli->query("DELETE FROM Shelf WHERE id='".$_POST['removeShelf']."'");
+                echo true;
+            }
+        }
     }
 
 ?>

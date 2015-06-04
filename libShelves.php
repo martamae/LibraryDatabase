@@ -91,7 +91,7 @@
 <div>
     <table class="shelf">
         <tbody>
-            <tr><th>Shelf</th><th>Location</th><th>Genres</th>
+            <tr><th>Shelf</th><th>Location</th><th>Genres</th><th>Remove</th>
             <?php
                 $shelves = $mysqli->query("SELECT id, location ,floorNum FROM Shelf");
 
@@ -108,14 +108,19 @@
                     echo "<td>";
 
                     //Get get genre data
-                    $genres = $mysqli->query("SELECT genre FROM Book
+                    $genres = $mysqli->query("SELECT distinct genre FROM Book
                                             WHERE shelf='" . $row['id'] . "'");
 
                     while ($genRow = $genres->fetch_assoc()) {
                         echo $genRow['genre'] . "<br>";
                     }
+
+                    echo '<td><button type="button" class="tableButton" value="'.$row['id'].'" onclick="removeShelf(this)">Remove</button>';
+
                 }
             }
+
+
             ?>
             </tbody>
         </table>
