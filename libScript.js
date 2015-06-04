@@ -534,7 +534,15 @@ var checkPin = function () {
         if (this.readyState === 4 && req.status === 200) {
             var correct = req.responseText;
 
-            if (correct) {
+            if (correct == "out") {
+                var message = document.getElementById("dMessage");
+                message.innerHTML = "You cannot delete your account if you have books checked out";
+            }
+            else if (correct == "req") {
+                var message = document.getElementById("dMessage");
+                message.innerHTML = "You cannot delete your account if you have books requested";
+            }
+            else if (correct == true) {
                 //confirm the user wantes to delete their account
                 var yes = confirm("Are you sure you want to delete you account?");
 

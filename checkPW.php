@@ -92,8 +92,27 @@ if(isset($_SESSION['cardNum'])) {
     //Check that password is correct for account delete
     if (isset($_POST['deleteCheck'])) {
         if ($_POST['pin'] == $pw['pinNum']) {
-            echo true;
-        } else {
+            //Check that the user has no checked out books
+            $booksOut = $mysqli->query("SELECT id FROM Book
+                                        WHERE checkedOutBy=(SELECT id FROM Person WHERE pinNum='".$pw['pinNum']."')");
+            $outNum = mysqli_num_rows($booksOut);
+            if ($outNum != 0) {
+                echo "out";
+            }
+            else {
+                //Check that user has no requests
+                $requests = $mysqli->query("SELECT id FROM request WHERE pid=(SELECT id FROM Person WHERE pinNum='".$pw['pinNum']."')");
+                $reqNum = mysqli_num_rows($requests);
+
+                if($reqNum != 0){
+                    echo "req";
+                }
+                else {
+                    echo true;
+                }
+            }
+        }
+        else {
             echo false;
         }
     }
