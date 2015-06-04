@@ -30,11 +30,6 @@
     if (!$mysqli|| $mysqli->connect_errno) {
         echo "Failed to connect:" . $mysqli->connect_errno . " " . $mysqli->connect_error;
     }
-
-    //Delete book button clicked
-    if(isset($_POST['deleteBook'])) {
-        $mysqli->query("DELETE FROM Book WHERE id='".$_POST['deleteBook']."'");
-    }
 ?>
 
 <!DOCTYPE html>
@@ -76,11 +71,6 @@
         <a href="librarianProfile.php"><input type="button" class="profileButton" value="Profile"></a>
     </div>
 
-    <!-- Button to add book -->
-    <div class="profileLink">
-        <a href="addBook.php"><input type="button" class="profileButton" value="Add Book"></a>
-    </div>
-
     <!-- Button to logout -->
     <div class="logout">
         <a href="librarianHome.php?action=logout"><input type="button" class="logoutButton" value="Logout"></a>
@@ -102,6 +92,20 @@
         </form>
     </div>
 </div>
+
+<div class="lheader">
+    <!-- Button to add book -->
+    <div class="profileLink">
+        <a href="addBook.php"><input type="button" class="lButton" value="Add Book"></a>
+    </div>
+    <?php
+    if (isset($_GET['searchParameter'])) {
+        //Button to see all books if user has searched
+        echo '<a href="librarianHome.php"><input type="button" class="lButton" value="See All Books"></a>';
+    }
+    ?>
+</div>
+
 
 <div>
     <table>
@@ -221,13 +225,6 @@
         ?>
         </tbody>
     </table>
-
-    <?php
-    if (isset($_GET['searchParameter'])) {
-        //Button to see all books if user has searched
-        echo '<a href="librarianHome.php"><input type="button" class="seeAll" value="See All Books"></a>';
-    }
-    ?>
 
 </div>
 

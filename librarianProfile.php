@@ -33,6 +33,7 @@
 
     //Delete book button clicked
     if(isset($_POST['deleteBook'])) {
+        //Chec
         $mysqli->query("DELETE FROM Book WHERE id='".$_POST['deleteBook']."'");
     }
 ?>
@@ -73,12 +74,7 @@
 
     <!-- Link to the users profile page -->
     <div class="profileLink">
-        <a href="librarianHome.php"><input type="button" class="profileButton" value="Home"></a>
-    </div>
-
-    <!-- Button to add book -->
-    <div class="profileLink">
-        <a href="addBook.php"><input type="button" class="profileButton" value="Add Book"></a>
+        <a href="librarianHome.php"><input type="button" class="profileButton" value="Inventory"></a>
     </div>
 
 
@@ -96,18 +92,12 @@
         $profileInfo = $personInfo->fetch_assoc();
         echo "Name: " .$profileInfo['fname']. " " .$profileInfo['lname']. "<br>";
         echo "Username: " .$profileInfo['username']. "<br>";
-        echo "Date started: " .$profileInfo['startDate'];
+        echo "Date started: " .$profileInfo['startDate']. "<br><br>";
     ?>
 
     <div id="pwCheck" class="profButton">
         <input type="button" class="inProfile" value="Change Pin" id="change" onclick="pwForm()">
         <p id="pwMessage" class="message"></p>
-    </div>
-
-    <!--Button to delete account-->
-    <div id="delete" class="profButton">
-        <input type="button" class="inProfile" value="Delete Account" id="deleteButton" onclick="deleteForm()">
-        <p id="dMessage" class="message"></p>
     </div>
 
 

@@ -168,34 +168,6 @@ else if(isset($_SESSION['username'])) {
             echo false;
         }
     }
-
-    //Check that password is correct for account delete
-    if (isset($_POST['deleteCheck'])) {
-        if ($_POST['pin'] == $pw['pinNum']) {
-            echo true;
-        } else {
-            echo false;
-        }
-    }
-
-    if (isset($_POST['delete'])) {
-        //Get pin
-        $pin = $_POST['pin'];
-
-        //Delete the library card
-        //Prepare statement
-        $statement = $mysqli->prepare("DELETE FROM Librarian WHERE pinNum = ?");
-
-        $statement->bind_param('i', $pin);
-
-        if ($statement->execute()) {
-            //If the Librarian is deleted end session
-            $_SESSION = array();
-            session_destroy();
-            header("Location: libraryHome.php", true);
-            die();
-        }
-    }
 }
 
 $mysqli->close();

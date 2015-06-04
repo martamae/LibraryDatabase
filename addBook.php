@@ -65,7 +65,7 @@
 
     <!-- Button to add book -->
     <div class="profileLink">
-        <a href="librarianHome.php"><input type="button" class="profileButton" value="Home"></a>
+        <a href="librarianHome.php"><input type="button" class="profileButton" value="Inventory"></a>
     </div>
 
     <!-- Button to logout -->

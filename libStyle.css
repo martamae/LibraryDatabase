@@ -9,7 +9,7 @@ body
 {
     text-align:center;
 }
-.header, .pheader
+.header, .pheader, .lheader
 {
     padding-top: 25px;
     padding-bottom:25px;
@@ -49,7 +49,7 @@ body
     margin-bottom:5px;
 }
 .homeButton, .searchButton, .logoutButton, .profileButton, 
-.tableButton, .seeAll, .inProfile, .jButton, .bButton
+.tableButton, .inProfile, .jButton, .bButton, .lButton
 {
     padding:10px;
     border-radius: 10px;
@@ -103,7 +103,8 @@ a:hover
     font-size:75%;
     margin:0px;  
 }
-.logoutButton, .searchButton, .profileButton, .tableButton
+.logoutButton, .searchButton, .profileButton, .tableButton, 
+.lButton
 {
     font-size:90%;
 }
@@ -129,6 +130,7 @@ a:hover
 table 
 {
     margin:50px;
+    margin-top:15px;
     border-style:solid;
     border-collapse:collapse;
 }
@@ -158,10 +160,6 @@ table, th, td
 {
     margin-top: 10px;
     margin-left:10px;
-}
-.seeAll 
-{
-   margin-left:300px;
 }
 .pProfile 
 {
@@ -198,4 +196,12 @@ table, th, td
     margin-top:15px;
     margin-left:50px;
 }
-    
+.lheader 
+{
+    background-color:inherit;
+    color:#4A4D4D;
+    border:none;
+    height: 15px;
+    width:auto;
+    margin-left:40%;
+}

@@ -709,14 +709,26 @@ var deleteBook = function (button) {
         var variablesToSend = "deleteBook=" + bookId;
         req.onreadystatechange = function () {
             if (this.readyState === 4 && req.status === 200) {
-                //When book has been deleted print success message
-                alert(bookName + " has been deleted from the library");
+                var deleted = req.responseText;
 
-                location.reload();
+
+
+                if (deleted == "out") {
+                    alert("You must wait until this book is returned to delete it");
+                }
+                else if (deleted == "request") {
+                    alert("You must wait until this book is not requested to delete it");
+                }
+                else if (deleted == true) {
+                    //When book has been deleted print success message
+                    alert(bookName + " has been deleted from the library");
+
+                    location.reload();
+                }
             }
         };
 
-        req.open('POST', 'librarianHome.php', true);
+        req.open('POST', 'addBookShelf.php', true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.send(variablesToSend);
 
@@ -725,6 +737,8 @@ var deleteBook = function (button) {
 
 //ADD BOOK FUNCTIONS
 var addNewGenre = function () {
+    //New input field for user to enter custom genre
+
     //Adds input field to add book page to get genre
     var selectList = document.getElementById("selectGenre");
 
@@ -747,18 +761,40 @@ var addNewGenre = function () {
 }
 
 var addValidateNewGenre = function () {
+    //Validate that elements are not empty when 
+    //new genre is entered
+
+    //Get elements
+    var title = document.getElementById("title").value;
+    var fname = document.getElementById("fname").value;
+    var lname = document.getElementById("lname").value;
     var genre = document.getElementById("addGenreText").value;
 
+    //Check that elements are not empty
     if(genre == "") {
         var message = document.getElementById("addMessage");
         message.innerHTML = "Genre field cannot be left empty";
     }
+    else if (title == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Title field cannot be left empty";
+    }
+    else if (fname == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Author name field cannot be left empty";
+    }
+    else if (lname == "") {
+        var message = document.getElementById("addMessage");
+        message.innerHTML = "Author name field cannot be left empty";
+    }
     else {
-        addValidate();
+        addBookNewGen();
     }
 }
 
 var addValidate = function () {
+    //Validate that elements are not empty when genre is selected
+
     //Get elements
     var title = document.getElementById("title").value;
     var fname = document.getElementById("fname").value;
@@ -777,4 +813,94 @@ var addValidate = function () {
         var message = document.getElementById("addMessage");
         message.innerHTML = "Author name field cannot be left empty";
     }
+    else {
+        addBook();
+    }
 }
+
+var addBook = function () {
+    //Get elements to validate and add
+    var title = document.getElementById("title").value;
+    var fname = document.getElementById("fname").value;
+    var lname = document.getElementById("lname").value;
+    var genre = document.getElementById("genreChoice").value;
+    var description = document.getElementById("description").value;
+
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "addBook=set&title=" + title + "&fname=" + fname + "&lname=" + lname + "&genre=" + genre + "&description=" + description;
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            var added = req.responseText;
+            console.log(added);
+            if (added == "title") {
+                var message = document.getElementById("addMessage");
+                message.innerHTML = "Title must be unique";
+            }
+            else if (added == true) {
+                //When book has been deleted print success message
+                alert(title + " has been added from the library");
+
+                window.location.href = "librarianHome.php";
+            }
+            else {
+                var message = document.getElementById("addMessage");
+                message.innerHTML = "Problem adding book try again";
+            }
+        }
+    };
+
+    req.open('POST', 'addBookShelf.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("addMessage");
+    message.innerHTML = "Processing...";
+}
+
+
+var addBookNewGen = function() {
+    //Get elements to validate and add
+    var title = document.getElementById("title").value;
+    var fname = document.getElementById("fname").value;
+    var lname = document.getElementById("lname").value;
+    var genre = document.getElementById("addGenreText").value;
+    var description = document.getElementById("description").value;
+    var shelf = document.getElementById("shelf").value;
+
+    var req = new XMLHttpRequest();
+
+    if (!req) {
+        throw 'Unable to create HttpRequest.';
+    }
+
+    var variablesToSend = "addBookNewGen=set&title=" + title + "&fname=" + fname + "&lname=" + lname + "&genre=" + genre + "&description=" + description+"&shelf="+shelf;
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && req.status === 200) {
+            var added = req.responseText;
+            console.log(added);
+            if (added == "title") {
+                var message = document.getElementById("addMessage");
+                message.innerHTML = "Title must be unique";
+            }
+            else {
+                //When book has been deleted print success message
+                alert(title + " has been added from the library");
+
+                window.location.href = "librarianHome.php";
+            }
+        }
+    };
+
+    req.open('POST', 'addBookShelf.php', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(variablesToSend);
+
+    var message = document.getElementById("addMessage");
+    message.innerHTML = "Processing...";
+}
+    

@@ -126,6 +126,15 @@
     </div>
 </div>
 
+<div class="lheader">
+    <?php
+    if (isset($_GET['searchParameter'])) {
+        //Button to see all books if user has searched
+        echo '<a href="librarianHome.php"><input type="button" class="lButton" value="See All Books"></a>';
+    }
+    ?>
+</div>
+
 <div>
     <table>
         <tbody>
@@ -259,13 +268,6 @@
         ?>
         </tbody>
     </table>
-
-    <?php
-        if (isset($_GET['searchParameter'])) {
-            //Button to see all books if user has searched
-            echo '<a href="patronHome.php"><input type="button" class="seeAll" value="See All Books"></a>';
-        }
-    ?>
 
 </div>
 
