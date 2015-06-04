@@ -89,70 +89,31 @@
 
 
 <div>
-    <table>
+    <table class="shelf">
         <tbody>
-            <tr><th>Shelf</th><th>Genres</th><th>Location</th>
+            <tr><th>Shelf</th><th>Location</th><th>Genres</th>
             <?php
-                $shelves = $mysqli->query("SELECT id FROM shelf ")
+                $shelves = $mysqli->query("SELECT id, location ,floorNum FROM Shelf");
 
-            if (mysqli_num_rows($books) == 0){
-                echo '<p class="error">There are no books in the inventory matching that description</p>';
+            if (mysqli_num_rows($shelves) == 0){
+                echo '<p class="error">There are no shelves in the library</p>';
             }
             else {
-                //Get added by information
-                //Print table of books from database
-                while ($row = $books->fetch_assoc()) {
-                    echo "<tr> <td>" . $row['title'] . "<td>" . $row['authorFName'] . " " . $row['authorLName'] . "<td>" . $row['description'] . "<td>" . $row['genre'];
+                //Print table of shelves
+                while ($row = $shelves->fetch_assoc()) {
+                    echo "<tr> <td>" . $row['id'];
 
                     echo "<td> Floor " . $row['floorNum'] . "<br>" . $row['location'];
 
                     echo "<td>";
 
-                    //Check out row
+                    //Get get genre data
+                    $genres = $mysqli->query("SELECT genre FROM Book
+                                            WHERE shelf='" . $row['id'] . "'");
 
-                    //Get request data
-                    $requests = $mysqli->query("SELECT fname, lname FROM Person
-                                            LEFT JOIN request ON request.pid = Person.id
-                                            WHERE bid='".$row['id']."'");
-                    $numRequests = mysqli_num_rows($requests);
-
-                    //Print status of book
-                    if ($row['checkedOutBy'] == NULL) {
-                        //If book is not checked out
-                        echo "On Shelf <br><br>";
-                        if ($numRequests == 0) {
-                            echo "There are no requests <br>";
-                        }
-                        else { //Print requests
-                            echo "Requested by: <br>";
-                            while ($reqRow = $requests->fetch_assoc()) {
-                                echo $reqRow['fname']. " " . $reqRow['lname'] . "<br>";
-                            }
-                        }
+                    while ($genRow = $genres->fetch_assoc()) {
+                        echo $genRow['genre'] . "<br>";
                     }
-                    else { //If the book is checked out
-                        //Print checked out by
-                        echo "Checked<br> out by:<br>" . $row['pfname'] . " " . $row['plname'] . "<br>";
-                        echo "Date out:<br>" . $row['dateOut'] . "<br>";
-                        echo "Due date:<br>" . $row['dueDate']. "<br><br>";
-
-                        //Print requests
-                        if ($numRequests == 0) {
-                            echo "There are no requests <br>";
-                        }
-                        else {
-                            echo "Requested by: <br>";
-                            while ($reqRow = $requests->fetch_assoc()) {
-                                echo $reqRow['fname']. " " . $reqRow['lname'] . "<br>";
-                            }
-                        }
-                    }
-
-                    //Book added by
-                    echo "<td>" . $row['lfname'] . " " . $row['llname'];
-
-                    //Delete Button - deletes book
-                    echo '<td><button type="button" class="tableButton" value="'.$row['id'].'" name="'.$row['title'].'" onclick="deleteBook(this)">Delete</button>';
                 }
             }
             ?>
