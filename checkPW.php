@@ -120,6 +120,9 @@ if(isset($_SESSION['cardNum'])) {
     if (isset($_POST['delete'])) {
         //Get pin
         $pin = $_POST['pin'];
+        //Select person id
+        $id = $mysqli->query("SELECT id FROM Person WHERE pinNum='".$pin."'");
+        $delID = $id->fetch_assoc();
 
         //Delete the library card
         //Prepare statement
@@ -130,9 +133,9 @@ if(isset($_SESSION['cardNum'])) {
         if ($statement->execute()) {
             //Delete the account
             //Prepare statement
-            $smt = $mysqli->prepare("DELETE FROM Person WHERE pinNum = ?");
+            $smt = $mysqli->prepare("DELETE FROM Person WHERE id = ?");
 
-            $smt->bind_param('i', $pin);
+            $smt->bind_param('i', $delID['id']);
 
             if ($smt->execute()) {
                 //If the Person is deleted end session

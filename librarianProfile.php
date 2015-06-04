@@ -77,6 +77,10 @@
         <a href="librarianHome.php"><input type="button" class="profileButton" value="Inventory"></a>
     </div>
 
+    <!-- Button to shelves page -->
+    <div class="profileLink">
+        <a href="libShelves.php"><input type="button" class="profileButton" value="Shelves"></a>
+    </div>
 
     <!-- Button to logout -->
     <div class="logout">
