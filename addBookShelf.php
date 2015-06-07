@@ -45,6 +45,9 @@
                             echo false;
                         }
                         else {
+                            //close statement
+                            $statement->close();
+
                             echo true;
                         }
                     }
@@ -81,6 +84,9 @@
                             echo false;
                         }
                         else {
+                            //Close statement
+                            $statement->close();
+
                             echo true;
                         }
                     }

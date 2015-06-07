@@ -83,18 +83,17 @@
 <?php
 //Adding shelf
 if(isset($_POST['location'])){
-    echo $_POST['location'] . $_POST['floorNum'];
     //Create new shelf
     if(!($statement = $mysqli->prepare("INSERT INTO Shelf(location, floorNum) VALUES (?, ?)"))) {
-        echo "false2";
+        echo '<p class="error">Error adding shelf. Try again</p>';
     }
 
     if(!($statement->bind_param('si', $_POST['location'], $_POST['floorNum']))) {
-        "echo false";
+        echo '<p class="error">Error adding shelf. Try again</p>';
     }
 
     if (!($statement->execute())) {
-        echo "false3";
+        echo '<p class="error">Error adding shelf. Try again</p>';
     }
 
     $genres = $mysqli->query("SELECT distinct genre FROM Book");

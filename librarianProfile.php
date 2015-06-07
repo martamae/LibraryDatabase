@@ -31,11 +31,6 @@
         echo "Failed to connect:" . $mysqli->connect_errno . " " . $mysqli->connect_error;
     }
 
-    //Delete book button clicked
-    if(isset($_POST['deleteBook'])) {
-        //Chec
-        $mysqli->query("DELETE FROM Book WHERE id='".$_POST['deleteBook']."'");
-    }
 ?>
 
 <!DOCTYPE html>

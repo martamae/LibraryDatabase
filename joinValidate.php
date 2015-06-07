@@ -47,6 +47,9 @@
                         echo false;
                     }
                     else {
+                        //Close smt
+                        $smt->close();
+
                         //Create Person
                         if (!($statement = $mysqli->prepare("INSERT INTO Person(DOB, fname, lname, pinNum, libraryCardNum)
                                                 VALUES (?, ?, ?, ?, (SELECT id FROM libraryCard WHERE pinNum= ?))"))){
@@ -61,6 +64,9 @@
                                      echo false;
                                  }
                                  else {
+                                     //Close statement
+                                     $statement->close();
+
                                      //select card number to start session and print to user
                                      $num = $mysqli->query("SELECT id FROM libraryCard WHERE pinNum='".$_POST['pinNum']."'");
                                      $cardNum = $num->fetch_assoc();
@@ -134,6 +140,9 @@
                         echo false;
                     }
                     else {
+                        //Close smt
+                        $smt->close();
+
                         //Start session
                         session_start();
 
